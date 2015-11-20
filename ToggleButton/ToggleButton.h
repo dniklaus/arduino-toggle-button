@@ -4,11 +4,21 @@
 class Timer;
 
 //-----------------------------------------------------------------------------
+
 class ToggleButtonAdapter
 {
 public:
   virtual void notifyStatusChanged(bool isActive) = 0;
+
+protected:
+  ToggleButtonAdapter() { }
+  virtual ~ToggleButtonAdapter() { }
+
+private:  // forbidden functions
+  ToggleButtonAdapter(const ToggleButtonAdapter& src);              // copy constructor
+  ToggleButtonAdapter& operator = (const ToggleButtonAdapter& src); // assignment operator
 };
+
 //-----------------------------------------------------------------------------
 
 class ToggleButton
@@ -19,7 +29,7 @@ public:
    * @param buttonPin 
    * @param indicatorPin
    */
-  ToggleButton(int buttonPin, int indicatorPin, bool isButtonNegativeLogic = false, ToggleButtonAdapter* adapter = 0);
+  ToggleButton(int buttonPin, int indicatorPin = -1, bool isButtonNegativeLogic = false, ToggleButtonAdapter* adapter = 0);
   virtual ~ToggleButton();
   ToggleButtonAdapter* adapter();
   void attachAdapter(ToggleButtonAdapter* adapter);

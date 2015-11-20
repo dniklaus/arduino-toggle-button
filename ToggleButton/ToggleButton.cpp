@@ -54,8 +54,11 @@ ToggleButton::ToggleButton(int buttonPin, int indicatorPin, bool isButtonNegativ
   pinMode(m_buttonPin, INPUT);
   digitalWrite(m_buttonPin, m_isButtonNegativeLogic ? HIGH : LOW); // pull
 
-  pinMode(m_indicatorPin, OUTPUT);
-  digitalWrite(m_indicatorPin, m_isActive);
+  if (0 <= m_indicatorPin)
+  {
+    pinMode(m_indicatorPin, OUTPUT);
+    digitalWrite(m_indicatorPin, m_isActive);
+  }
 }
 
 ToggleButton::~ToggleButton()
@@ -83,7 +86,10 @@ void ToggleButton::setIsActive(bool isActive)
 {
   bool changed = (isActive != m_isActive);
   m_isActive = isActive;
-  digitalWrite(m_indicatorPin, m_isActive);
+  if (0 <= m_indicatorPin)
+  {
+    digitalWrite(m_indicatorPin, m_isActive);
+  }
   if ((0 != m_adapter) && (changed))
   {
     m_adapter->notifyStatusChanged(m_isActive);
