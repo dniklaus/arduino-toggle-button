@@ -2,7 +2,12 @@
 #include "Timer.h"
 #include "Arduino.h"
 
-const int ToggleButton::s_defaultKeyPollTime = 50;
+const bool ToggleButton::IS_POS_LOGIC = false;
+const bool ToggleButton::IS_NEG_LOGIC = true;
+const int  ToggleButton::BTN_NC       = -1;
+const int  ToggleButton::IND_NC       = -1;
+
+const int  ToggleButton::s_defaultKeyPollTime = 50;
 
 //-----------------------------------------------------------------------------
 
@@ -22,7 +27,6 @@ public:
   {
     if (0 != m_toggleButton)
     {
-      //Serial.println("timeExpired");
       bool currentIsButtonPressed = m_toggleButton->isButtonPressed();
       
       if (m_lastWasButtonPressed != currentIsButtonPressed)
@@ -31,7 +35,6 @@ public:
         if (currentIsButtonPressed)
         {
           m_toggleButton->toggle();
-          //Serial.println("toggle");
         }
       } 
     }
@@ -39,9 +42,6 @@ public:
 };
 
 //-----------------------------------------------------------------------------
-
-const bool ToggleButton::IS_POS_LOGIC = false;
-const bool ToggleButton::IS_NEG_LOGIC = true;
 
 ToggleButton::ToggleButton(int buttonPin, int indicatorPin, bool isButtonNegativeLogic, ToggleButtonAdapter* adapter)
 : m_debounceTimer(new Timer(new MyDebounceTimerAdatper(this), Timer::IS_RECURRING, s_defaultKeyPollTime))
@@ -51,9 +51,11 @@ ToggleButton::ToggleButton(int buttonPin, int indicatorPin, bool isButtonNegativ
 , m_buttonPin(buttonPin)
 , m_indicatorPin(indicatorPin)
 { 
-  pinMode(m_buttonPin, INPUT);
-  digitalWrite(m_buttonPin, m_isButtonNegativeLogic ? HIGH : LOW); // pull
-
+  if (0 <= m_buttonPin)
+  {
+    pinMode(m_buttonPin, INPUT);
+    digitalWrite(m_buttonPin, m_isButtonNegativeLogic ? HIGH : LOW); // pull
+  }
   if (0 <= m_indicatorPin)
   {
     pinMode(m_indicatorPin, OUTPUT);
@@ -108,7 +110,12 @@ void ToggleButton::toggle()
 
 bool ToggleButton::isButtonPressed()
 {
-  bool pressed = digitalRead(m_buttonPin);
-  return (m_isButtonNegativeLogic ? !pressed : pressed);
+  bool pressed = false;
+  if (0 <= m_buttonPin)
+  {
+    pressed = digitalRead(m_buttonPin);
+    pressed = (m_isButtonNegativeLogic ? !pressed : pressed);
+  }
+  return pressed;
 }
 
