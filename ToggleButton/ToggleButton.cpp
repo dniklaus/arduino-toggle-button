@@ -101,7 +101,10 @@ void ToggleButton::setIsActive(bool isActive)
 void ToggleButton::toggle()
 {
   m_isActive = !m_isActive;
-  digitalWrite(m_indicatorPin, m_isActive);
+  if (0 <= m_indicatorPin)
+  {
+    digitalWrite(m_indicatorPin, m_isActive);
+  }
   if (0 != m_adapter)
   {
     m_adapter->notifyStatusChanged(m_isActive);
