@@ -86,7 +86,7 @@ public:
    * Toggle current status.
    * Set new status to true if current was false and vice versa.
    */
-  void toggle();
+  virtual void toggle();
 
   /**
    * Retrieve current button status.
