@@ -61,6 +61,10 @@ ToggleButton::ToggleButton(int buttonPin, int indicatorPin, bool isButtonNegativ
     pinMode(m_indicatorPin, OUTPUT);
     digitalWrite(m_indicatorPin, m_isActive);
   }
+  if (0 != m_adapter)
+  {
+    m_adapter->assignToggleButton(this);
+  }
 }
 
 ToggleButton::~ToggleButton()

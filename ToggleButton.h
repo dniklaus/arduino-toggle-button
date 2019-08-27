@@ -2,6 +2,7 @@
 #define _ToggleButton_H
 
 class Timer;
+class ToggleButton;
 
 //-----------------------------------------------------------------------------
 
@@ -17,6 +18,8 @@ public:
    * @param isActive  Indicates the new status: active (true) or inactive (false).
    */
   virtual void notifyStatusChanged(bool isActive) = 0;
+
+  virtual void assignToggleButton(ToggleButton* toggleButton) { }
 
 protected:
   ToggleButtonAdapter() { }
